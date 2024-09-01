@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizador</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-color: white; /* Fondo blanco */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            position: relative;
+        }
+
+        #timerButton {
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            font-size: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: absolute;
+        }
+
+        #changeTimeButton {
+            background-color: grey;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 5px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+        }
+
+        #changeTimeButton:hover {
+            background-color: darkgrey;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Botón de reinicio con temporizador al centro -->
+    <button id="timerButton">
+        <span id="timer">02:00</span>
+    </button>
+
+    <!-- Botón para cambiar la longitud del temporizador -->
+    <button id="changeTimeButton">Cambiar Tiempo</button>
+
+    <script>
+        let countdown;
+        let timeLeft = 120; // 120 segundos = 2 minutos
+        let initialTime = 120; // Tiempo inicial
+        const timerDisplay = document.getElementById('timer');
+        const timerButton = document.getElementById('timerButton');
+        const changeTimeButton = document.getElementById('changeTimeButton');
+
+        // Función para mostrar el tiempo en el formato mm:ss
+        function displayTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainderSeconds = seconds % 60;
+            const display = `${minutes < 10 ? '0' : ''}${minutes}:${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`;
+            timerDisplay.textContent = display;
+        }
+
+        // Función para comenzar la cuenta regresiva
+        function startTimer() {
+            countdown = setInterval(() => {
+                timeLeft--;
+                displayTime(timeLeft);
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                }
+            }, 1000);
+        }
+
+        // Función para reiniciar el temporizador
+        function resetTimer() {
+            clearInterval(countdown); // Detiene el temporizador actual
+            timeLeft = initialTime; // Restablece al tiempo seleccionado
+            displayTime(timeLeft); // Actualiza el display
+            startTimer(); // Comienza de nuevo
+        }
+
+        // Función para cambiar la longitud del temporizador
+        function changeTime() {
+            const newTime = prompt("Ingrese la longitud del temporizador en minutos:", "2");
+            if (newTime !== null) {
+                initialTime = parseInt(newTime) * 60; // Convierte los minutos a segundos
+                resetTimer(); // Reinicia el temporizador con el nuevo tiempo
+            }
+        }
+
+        // Inicia el temporizador cuando se carga la página
+        startTimer();
+
+        // Agregar un evento al botón de reinicio
+        timerButton.addEventListener('click', resetTimer);
+
+        // Agregar un evento al botón de cambio de tiempo
+        changeTimeButton.addEventListener('click', changeTime);
+    </script>
+
+</body>
+</html>
